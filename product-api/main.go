@@ -16,12 +16,10 @@ func main() {
 
 	ph := handlers.NewProducts(l)
 
-	// sm := http.NewServeMux()
 	sm := mux.NewRouter()
-	// m.Handle("/", ph)
+
 	getRouter := sm.Methods("GET").Subrouter()
 	getRouter.HandleFunc("/", ph.GetProducts)
-	// sm.Handle("/products", ph)
 
 	putRouter := sm.Methods("PUT").Subrouter()
 	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
@@ -45,7 +43,6 @@ func main() {
 			l.Fatal(err)
 		}
 	}()
-	// http.ListenAndServe(":9090", sm)
 
 	sigChan := make(chan os.Signal)
 	signal.Notify(sigChan, os.Interrupt)
