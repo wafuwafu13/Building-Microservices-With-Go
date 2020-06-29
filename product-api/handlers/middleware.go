@@ -4,14 +4,14 @@ import (
 	"context"
 	"net/http"
 	"fmt"
-	"Building-Microservices-With-go/product-api/data"
+	"Building-Microservices-With-Go/product-api/data"
 )
 
 func (p Products) MiddlewareProductValidation(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		prod := data.Product{}
 
-	    err := prod.FromJSON(r.Body)
+	    err := data.FromJSON(prod, r.Body)
 	    if err != nil {
 			http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
 			return

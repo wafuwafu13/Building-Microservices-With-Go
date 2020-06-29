@@ -1,7 +1,10 @@
 package handlers
 
 import (
+	"net/http"
 	"log"
+	"strconv"
+	"github.com/gorilla/mux"
 )
 
 type Products struct {
@@ -22,4 +25,16 @@ type GenericError struct {
 // ValidationError is a collection of validation error messages
 type ValidationError struct {
 	Messages []string `json:"messages"`
+}
+
+func getProductID(r *http.Request) int {
+	vars := mux.Vars(r)
+
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		panic(err)
+	}
+
+	return id
+
 }

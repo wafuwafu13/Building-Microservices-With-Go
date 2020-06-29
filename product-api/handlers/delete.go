@@ -2,19 +2,20 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
-	"Building-Microservices-With-go/product-api/data"
-	"github.com/gorilla/mux"
+	"Building-Microservices-With-Go/product-api/data"
 )
 
 // swagger:route DELETE /products/{id} products deleteProduct
 // Returns a list of products
 // responses:
-//  201: noContent
+//    201: noContentResponse
+//  404: errorResponse
+//  501: errorResponse
 
 func (p *Products) DeleteProduct(rw http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id, _ := strconv.Atoi(vars["id"])
+	rw.Header().Add("Content-Type", "application/json")
+
+	id := getProductID(r)
 
 	p.l.Println("Handle Delete Product", id)
 
@@ -29,4 +30,6 @@ func (p *Products) DeleteProduct(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, "Product not found", http.StatusInternalServerError)
 		return
 	}
+
+	rw.WriteHeader(http.StatusNoContent)
 }

@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"net/http"
-	"Building-Microservices-With-go/product-api/data"
+	"Building-Microservices-With-Go/product-api/data"
 )
 
 // swagger:route POST /products products createProduct

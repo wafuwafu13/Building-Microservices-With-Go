@@ -7,7 +7,7 @@ import (
 	"time"
 	"context"
 	"os/signal"
-	"Building-Microservices-With-go/product-api/handlers"
+	"Building-Microservices-With-Go/product-api/handlers"
 	"github.com/gorilla/mux"
 	"github.com/go-openapi/runtime/middleware"
 )
@@ -20,7 +20,8 @@ func main() {
 	sm := mux.NewRouter()
 
 	getRouter := sm.Methods("GET").Subrouter()
-	getRouter.HandleFunc("/products", ph.GetProducts)
+	getRouter.HandleFunc("/products", ph.ListAll)
+	getRouter.HandleFunc("/products/{id:[0-9]+}", ph.ListSingle)
 
 	putRouter := sm.Methods("PUT").Subrouter()
 	putRouter.HandleFunc("/products", ph.UpdateProducts)

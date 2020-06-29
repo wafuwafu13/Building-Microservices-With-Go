@@ -17,7 +17,7 @@
 package handlers
 
 import (
-	"Building-Microservices-With-go/product-api/data"
+	"Building-Microservices-With-Go/product-api/data"
 )
 
 // A list of products returns in the response
@@ -36,17 +36,12 @@ type productResponseWrapper struct {
 	Body data.Product
 }
 
-// swagger:response noContent
-type productsNoContent struct {
-
-}
-
 // No content is returned by this API endpoint
 // swagger:response noContentResponse
 type noContentResponseWrapper struct {
 }
 
-// swagger:parameters deleteProduct
+// swagger:parameters listSingleProduct deleteProduct
 type productIDParameterWrapper struct {
 	// The id of the product to delete from the database
 	// in: path
