@@ -1,0 +1,128 @@
+basePath: /
+consumes:
+- application/json
+definitions:
+  GenericError:
+    description: GenericError is a generic error message returned by a server
+    properties:
+      message:
+        type: string
+        x-go-name: Message
+    type: object
+    x-go-package: Building-Microservices-With-Go/product-api/handlers
+  Product:
+    properties:
+      description:
+        type: string
+        x-go-name: Description
+      id:
+        description: the id for this user
+        format: int64
+        minimum: 1
+        type: integer
+        x-go-name: ID
+      name:
+        type: string
+        x-go-name: Name
+      price:
+        format: float
+        type: number
+        x-go-name: Price
+      sku:
+        type: string
+        x-go-name: SKU
+    required:
+    - id
+    type: object
+    x-go-package: Building-Microservices-With-Go/product-api/data
+  ValidationError:
+    description: ValidationError is a collection of validation error messages
+    properties:
+      messages:
+        items:
+          type: string
+        type: array
+        x-go-name: Messages
+    type: object
+    x-go-package: Building-Microservices-With-Go/product-api/handlers
+info:
+  description: Documentation for Product API
+  title: Petstore API.
+paths:
+  /products:
+    get:
+      description: Returns a list of products
+      operationId: listProducts
+      responses:
+        "200":
+          $ref: '#/responses/productsResponse'
+      tags:
+      - products
+    post:
+      description: Create a new product
+      operationId: createProduct
+      responses:
+        "200":
+          $ref: '#/responses/productResponse'
+        "422":
+          $ref: '#/responses/errorValidation'
+        "501":
+          $ref: '#/responses/errorResponse'
+      tags:
+      - products
+    put:
+      description: Update a products details
+      operationId: updateProduct
+      responses:
+        "201":
+          $ref: '#/responses/noContentResponse'
+        "404":
+          $ref: '#/responses/errorResponse'
+        "422":
+          $ref: '#/responses/errorValidation'
+      tags:
+      - products
+  /products/{id}:
+    delete:
+      description: Returns a list of products
+      operationId: deleteProduct
+      parameters:
+      - description: The id of the product to delete from the database
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+        x-go-name: ID
+      responses:
+        "201":
+          $ref: '#/responses/noContent'
+      tags:
+      - products
+produces:
+- application/json
+responses:
+  errorResponse:
+    description: Generic error message returned as a string
+    schema:
+      $ref: '#/definitions/GenericError'
+  errorValidation:
+    description: Validation errors defined as an array of strings
+    schema:
+      $ref: '#/definitions/ValidationError'
+  noContent: {}
+  noContentResponse:
+    description: No content is returned by this API endpoint
+  productResponse:
+    description: Data structure representing a single product
+    schema:
+      $ref: '#/definitions/Product'
+  productsResponse:
+    description: A list of products returns in the response
+    schema:
+      items:
+        $ref: '#/definitions/Product'
+      type: array
+schemes:
+- http
+swagger: "2.0"

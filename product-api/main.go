@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"Building-Microservices-With-go/product-api/handlers"
 	"github.com/gorilla/mux"
+	"github.com/go-openapi/runtime/middleware"
 )
 
 func main() {
@@ -19,15 +20,24 @@ func main() {
 	sm := mux.NewRouter()
 
 	getRouter := sm.Methods("GET").Subrouter()
-	getRouter.HandleFunc("/", ph.GetProducts)
+	getRouter.HandleFunc("/products", ph.GetProducts)
 
 	putRouter := sm.Methods("PUT").Subrouter()
-	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
+	putRouter.HandleFunc("/products", ph.UpdateProducts)
 	putRouter.Use(ph.MiddlewareProductValidation)
 
 	postRouter := sm.Methods("POST").Subrouter()
-	postRouter.HandleFunc("/", ph.AddProduct)
+	postRouter.HandleFunc("/products", ph.AddProduct)
 	postRouter.Use(ph.MiddlewareProductValidation)
+
+	deleteRouter := sm.Methods("DELETE").Subrouter()
+	deleteRouter.HandleFunc("/products/{id:[0-9]+}", ph.DeleteProduct)
+
+	opts := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
+	sh := middleware.Redoc(opts, nil)
+
+	getRouter.Handle("/docs", sh)
+	getRouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./")))
 
 	s := &http.Server{
 		Addr: ":9090",
